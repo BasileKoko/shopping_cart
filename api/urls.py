@@ -1,8 +1,8 @@
-from django.conf.urls import url, include
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    url(r'', views.ItemView.as_view(), name='item_view'),
-    url('rest-auth/', include('rest_auth.urls')),
+    path('items/', views.ItemView.as_view(), name='item_view'),
+    path('rest-auth/', include('rest_auth.urls')),
 
 ]
