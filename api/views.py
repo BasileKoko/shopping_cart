@@ -9,3 +9,11 @@ class ItemView(generics.ListAPIView):
 
     queryset = models.Item.objects.all()
     serializer_class = serializers.ItemSerializer
+
+
+class ItemDetailView(generics.RetrieveAPIView):
+    authentication_classes = []
+    permission_classes = []
+
+    queryset = models.Item.objects.all()
+    serializer_class = serializers.ItemSerializer
