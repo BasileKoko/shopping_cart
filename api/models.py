@@ -15,10 +15,10 @@ class Voucher(models.Model):
 
 
 class Basket(models.Model):
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    user = models.OneToOneField(User, on_delete=models.PROTECT, unique=True)
     items = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
 
 
 class Trolley(models.Model):
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    user = models.OneToOneField(User, on_delete=models.PROTECT, unique=True)
     items = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
