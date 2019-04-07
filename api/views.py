@@ -1,4 +1,7 @@
-from rest_framework import generics, serializers
+from django.db import IntegrityError
+from rest_framework import generics
+from rest_framework.response import Response
+
 from . import _serializers
 from . import models
 
@@ -15,13 +18,22 @@ class ItemDetailView(generics.RetrieveAPIView):
     serializer_class = _serializers.ItemSerializer
 
 
-class BasketView(generics.ListCreateAPIView):
+class BasketAddView(generics.ListCreateAPIView):
 
-    queryset = models.Basket.objects.all()
     serializer_class = _serializers.BasketSerializer
 
-    def perform_create(self, serializer):
-        serializer.validated_data['user'] = self.request.user.id
-        serializer.save(user=self.request.user)
+    def get_queryset(self):
+        queryset = models.Basket.objects.filter(user=self.request.user)
 
-        return super(BasketView, self).create(serializer)
+        return queryset
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.validated_data['user'] = user
+        serializer.save(user=user)
+
+        return super(BasketAddView, self).create(serializer)
+
+
+class BasketChangeView(generics.RetrieveUpdateDestroyAPIView):
+    pass
