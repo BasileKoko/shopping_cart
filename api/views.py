@@ -35,5 +35,7 @@ class BasketAddView(generics.ListCreateAPIView):
         return super(BasketAddView, self).create(serializer)
 
 
-class BasketChangeView(generics.RetrieveUpdateDestroyAPIView):
-    pass
+class BasketChangeView(generics.RetrieveUpdateAPIView):
+    serializer_class = _serializers.BasketSerializer
+    queryset = models.Basket.objects.all()
+
