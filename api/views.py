@@ -86,5 +86,17 @@ class TrolleyChangeView(generics.RetrieveUpdateAPIView):
         return super(TrolleyChangeView, self).perform_update(serializer)
 
 
-class TrolleyPaymentView(generics.RetrieveUpdateAPIView):
-    pass
+class OrderAddView(generics.ListCreateAPIView):
+    serializer_class = _serializers.OrderSerializer
+
+    def get_queryset(self):
+        queryset = models.Order.objects.filter(user=self.request.user)
+
+        return queryset
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.validated_data['user'] = user
+        serializer.save(user=user)
+
+        return super(OrderAddView, self).create(serializer)

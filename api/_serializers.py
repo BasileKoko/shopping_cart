@@ -64,6 +64,14 @@ class TrolleySerializer(serializers.ModelSerializer):
         return data
 
 
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = '__all__'
+        read_only_fields = ('user', 'items', 'total_paid')
+
+        model = models.Order
+
+
 class OrderHistorySerializer(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'

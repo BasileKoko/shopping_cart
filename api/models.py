@@ -32,5 +32,14 @@ class OrderHistory(models.Model):
     date = models.DateField()
     items = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
     total_paid = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0'))
-    payment_method = models.CharField(max_length=250)
+    payment_method = models.CharField(max_length=250, null=True, blank=True)
+
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    items = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
+    vouchers = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
+    total_paid = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0'))
+    payment_method = models.CharField(max_length=250, null=True, blank=True)
+    status = models.CharField(max_length=250, null=True, blank=True)
 

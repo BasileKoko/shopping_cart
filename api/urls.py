@@ -9,7 +9,7 @@ urlpatterns = [
     path('basket/change/add_to_trolley/<int:pk>/', views.BasketAddItemToTrolleyView.as_view()),
     path('trolley/add', views.TrolleyAddListView.as_view()),
     path('trolley/change/<int:pk>/', views.TrolleyChangeView.as_view()),
-    path('trolley/payment_method//', views.TrolleyPaymentView.as_view()),
+    path('order/add/', views.OrderAddView.as_view()),
     path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
 ]
