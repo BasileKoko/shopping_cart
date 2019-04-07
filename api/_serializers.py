@@ -29,7 +29,7 @@ class BasketSerializer(serializers.ModelSerializer):
         request = self.context['request']
         if request.method == 'POST':
             if models.Basket.objects.filter(user=request.user).exists():
-                error_message = 'Sorry you cannot add basket, visit basket/change to add more items'
+                error_message = 'Your basket is added, visit basket/change to add more items'
                 raise serializers.ValidationError(error_message)
 
         for item in data['items']:
@@ -53,11 +53,11 @@ class TrolleySerializer(serializers.ModelSerializer):
         request = self.context['request']
         if request.method == 'POST':
             if models.Trolley.objects.filter(user=request.user).exists():
-                error_message = 'Sorry you cannot add trolley, visit trolley/change to add more items'
+                error_message = 'Your trolley is added visit trolley/change to add more items'
                 raise serializers.ValidationError(error_message)
 
         if data['total_price']:
-            error_message = 'Sorry you cannot set total price trolley'
+            error_message = 'Sorry you cannot set total price for your trolley'
             raise serializers.ValidationError(error_message)
 
         for item in data['items']:

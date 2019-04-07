@@ -24,7 +24,7 @@ class Basket(models.Model):
 class Trolley(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT)
     items = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
-    total_price = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('0'))
+    total_price = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('0'), null=True, blank=True)
 
 
 class OrderHistory(models.Model):
