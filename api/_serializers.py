@@ -28,12 +28,14 @@ class BasketSerializer(serializers.ModelSerializer):
     def validate(self, data):
         user = self.context['request'].user
         if models.Basket.objects.filter(user=user).exists():
-            error_message = 'Sorry you can\'t add basket, visit basket/change to add more items'
+            error_message = 'Sorry you cannot add basket, visit basket/change to add more items'
             raise serializers.ValidationError(error_message)
-        else:
-            for item in data['items']:
-                if item not in models.Item.objects.all().values_list('id', flat=True):
-                    raise serializers.ValidationError("You enter invalid item ID")
+
+        for item in data['items']:
+            if item not in models.Item.objects.all().values_list('id', flat=True):
+                error_message = 'You cannot add invalid item ID'
+                raise serializers.ValidationError(error_message)
+
         return data
 
 
