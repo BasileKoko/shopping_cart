@@ -1,8 +1,9 @@
-from django.db import IntegrityError
 from rest_framework import generics
-from rest_framework.response import Response
 
-from api.utils import remove_item_from_basket_update_or_create_trolley, calculate_trolley_total_price
+from api.utils import (
+    calculate_trolley_total_price,
+    remove_item_from_basket_update_or_create_trolley,
+)
 from . import _serializers
 from . import models
 
@@ -67,6 +68,20 @@ class TrolleyAddListView(generics.ListCreateAPIView):
         serializer.validated_data['user'] = user
         item_ids = serializer.validated_data['items']
         total_price = calculate_trolley_total_price(item_ids)
-        serializer.save(user=user, total_price=total_price)
+        serializer.save(user=user, items=item_ids, total_price=total_price)
 
         return super(TrolleyAddListView, self).create(serializer)
+
+
+class TrolleyChangeView(generics.RetrieveUpdateAPIView):
+    serializer_class = _serializers.TrolleySerializer
+    queryset = models.Trolley.objects.all()
+
+    def perform_update(self, serializer):
+        user = self.request.user
+        item_ids = serializer.validated_data['items']
+        serializer.validated_data['total_price'] = calculate_trolley_total_price(item_ids)
+        total_price = serializer.validated_data['total_price']
+        serializer.save(user=user, items=item_ids, total_price=total_price)
+
+        return super(TrolleyChangeView, self).perform_update(serializer)

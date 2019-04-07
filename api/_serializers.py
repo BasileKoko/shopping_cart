@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.fields import CurrentUserDefault
 from . import models
 
 
@@ -29,7 +28,7 @@ class BasketSerializer(serializers.ModelSerializer):
         request = self.context['request']
         if request.method == 'POST':
             if models.Basket.objects.filter(user=request.user).exists():
-                error_message = 'Your basket is added, visit basket/change to add more items'
+                error_message = 'Basket is created, you cannot create a second one'
                 raise serializers.ValidationError(error_message)
 
         for item in data['items']:
@@ -48,17 +47,14 @@ class TrolleySerializer(serializers.ModelSerializer):
         )
 
         model = models.Trolley
+        readonly_only_fields = ('user', 'total_price')
 
     def validate(self, data):
         request = self.context['request']
         if request.method == 'POST':
             if models.Trolley.objects.filter(user=request.user).exists():
-                error_message = 'Your trolley is added visit trolley/change to add more items'
+                error_message = 'Trolley is created, you cannot create a second one'
                 raise serializers.ValidationError(error_message)
-
-        if data['total_price']:
-            error_message = 'Sorry you cannot set total price for your trolley'
-            raise serializers.ValidationError(error_message)
 
         for item in data['items']:
             if item not in models.Item.objects.all().values_list('id', flat=True):

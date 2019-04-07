@@ -27,6 +27,8 @@ def remove_item_from_basket_update_or_create_trolley(user, updated_item_ids):
 
 def calculate_trolley_total_price(item_ids):
     total = Decimal()
+    if not item_ids:
+        return Decimal()
     items = models.Item.objects.filter(id__in=item_ids)
     for item in items:
         total += item.price
