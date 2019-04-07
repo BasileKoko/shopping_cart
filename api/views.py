@@ -1,19 +1,34 @@
-from rest_framework import generics
-from . import serializers
+from rest_framework import generics, serializers
+from . import _serializers
 from . import models
 
 
 class ItemView(generics.ListAPIView):
-    authentication_classes = []
-    permission_classes = []
 
     queryset = models.Item.objects.all()
-    serializer_class = serializers.ItemSerializer
+    serializer_class = _serializers.ItemSerializer
 
 
 class ItemDetailView(generics.RetrieveAPIView):
-    authentication_classes = []
-    permission_classes = []
 
     queryset = models.Item.objects.all()
-    serializer_class = serializers.ItemSerializer
+    serializer_class = _serializers.ItemSerializer
+
+
+class BasketView(generics.ListCreateAPIView):
+
+    queryset = models.Basket.objects.all()
+    serializer_class = _serializers.BasketSerializer
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault(),
+    )
+    # user = serializers.PrimaryKeyRelatedField(
+    #     read_only=True,
+    #     default=serializers.CurrentUserDefault()
+    # )
+
+    # def perform_create(self, serializer):
+
+        # serializer.save(user=user)
+
+

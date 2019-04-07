@@ -18,7 +18,10 @@ class VoucherSerializer(serializers.ModelSerializer):
 
 class BasketSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = '__all__'
+        # fields = '__all__'
+        fields = (
+            'items',
+        )
 
         model = models.Basket
 

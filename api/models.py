@@ -17,12 +17,12 @@ class Voucher(models.Model):
 
 
 class Basket(models.Model):
-    user = models.OneToOneField(User, on_delete=models.PROTECT, unique=True)
+    user = models.OneToOneField(User, on_delete=models.PROTECT)
     items = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
 
 
 class Trolley(models.Model):
-    user = models.OneToOneField(User, on_delete=models.PROTECT, unique=True)
+    user = models.OneToOneField(User, on_delete=models.PROTECT)
     items = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
     total_price = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('0'))
 
