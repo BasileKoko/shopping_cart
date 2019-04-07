@@ -38,4 +38,3 @@ class BasketAddView(generics.ListCreateAPIView):
 class BasketChangeView(generics.RetrieveUpdateAPIView):
     serializer_class = _serializers.BasketSerializer
     queryset = models.Basket.objects.all()
-
