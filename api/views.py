@@ -56,4 +56,16 @@ class BasketAddItemToTrolleyView(generics.RetrieveUpdateAPIView):
 
 class TrolleyAddListView(generics.ListCreateAPIView):
     serializer_class = _serializers.TrolleySerializer
-    queryset = models.Trolley.objects.all()
+    # queryset = models.Trolley.objects.all()
+
+    def get_queryset(self):
+        queryset = models.Trolley.objects.filter(user=self.request.user)
+
+        return queryset
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.validated_data['user'] = user
+        serializer.save(user=user)
+
+        return super(TrolleyAddListView, self).create(serializer)

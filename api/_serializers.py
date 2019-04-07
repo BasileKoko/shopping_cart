@@ -42,9 +42,30 @@ class BasketSerializer(serializers.ModelSerializer):
 
 class TrolleySerializer(serializers.ModelSerializer):
     class Meta:
-        fields = '__all__'
+        fields = (
+            'items',
+            'total_price',
+        )
 
         model = models.Trolley
+
+    def validate(self, data):
+        request = self.context['request']
+        if request.method == 'POST':
+            if models.Trolley.objects.filter(user=request.user).exists():
+                error_message = 'Sorry you cannot add trolley, visit trolley/change to add more items'
+                raise serializers.ValidationError(error_message)
+
+        if data['total_price']:
+            error_message = 'Sorry you cannot set total price trolley'
+            raise serializers.ValidationError(error_message)
+
+        for item in data['items']:
+            if item not in models.Item.objects.all().values_list('id', flat=True):
+                error_message = 'You add invalid item ID'
+                raise serializers.ValidationError(error_message)
+
+        return data
 
 
 class OrderHistorySerializer(serializers.ModelSerializer):
