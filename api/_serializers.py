@@ -28,7 +28,7 @@ class BasketSerializer(serializers.ModelSerializer):
         request = self.context['request']
         if request.method == 'POST':
             if models.Basket.objects.filter(user=request.user).exists():
-                error_message = 'Basket is created, you cannot create a second one'
+                error_message = 'Basket is created, you cannot create a second one. Visit /change to add more items'
                 raise serializers.ValidationError(error_message)
 
         for item in data['items']:
@@ -53,7 +53,7 @@ class TrolleySerializer(serializers.ModelSerializer):
         request = self.context['request']
         if request.method == 'POST':
             if models.Trolley.objects.filter(user=request.user).exists():
-                error_message = 'Trolley is created, you cannot create a second one'
+                error_message = 'Trolley is created, you cannot create a second one. Visit /change to add items'
                 raise serializers.ValidationError(error_message)
 
         for item in data['items']:

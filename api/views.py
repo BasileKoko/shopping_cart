@@ -67,8 +67,8 @@ class TrolleyAddListView(generics.ListCreateAPIView):
         user = self.request.user
         serializer.validated_data['user'] = user
         item_ids = serializer.validated_data['items']
-        total_price = calculate_trolley_total_price(item_ids)
-        serializer.save(user=user, items=item_ids, total_price=total_price)
+        serializer.validated_data['total_price'] = calculate_trolley_total_price(item_ids)
+        serializer.save(user=user, items=item_ids, total_price=serializer.validated_data['total_price'])
 
         return super(TrolleyAddListView, self).create(serializer)
 
@@ -81,7 +81,10 @@ class TrolleyChangeView(generics.RetrieveUpdateAPIView):
         user = self.request.user
         item_ids = serializer.validated_data['items']
         serializer.validated_data['total_price'] = calculate_trolley_total_price(item_ids)
-        total_price = serializer.validated_data['total_price']
-        serializer.save(user=user, items=item_ids, total_price=total_price)
+        serializer.save(user=user, items=item_ids, total_price=serializer.validated_data['total_price'])
 
         return super(TrolleyChangeView, self).perform_update(serializer)
+
+
+class TrolleyPaymentView(generics.RetrieveUpdateAPIView):
+    pass
