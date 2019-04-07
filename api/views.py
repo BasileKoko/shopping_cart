@@ -19,16 +19,9 @@ class BasketView(generics.ListCreateAPIView):
 
     queryset = models.Basket.objects.all()
     serializer_class = _serializers.BasketSerializer
-    user = serializers.HiddenField(
-        default=serializers.CurrentUserDefault(),
-    )
-    # user = serializers.PrimaryKeyRelatedField(
-    #     read_only=True,
-    #     default=serializers.CurrentUserDefault()
-    # )
 
-    # def perform_create(self, serializer):
+    def perform_create(self, serializer):
+        serializer.validated_data['user'] = self.request.user.id
+        serializer.save(user=self.request.user)
 
-        # serializer.save(user=user)
-
-
+        return super(BasketView, self).create(serializer)
