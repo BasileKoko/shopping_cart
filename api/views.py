@@ -2,6 +2,7 @@ from django.db import IntegrityError
 from rest_framework import generics
 from rest_framework.response import Response
 
+from api.utils import remove_item_from_basket_update_or_create_trolley
 from . import _serializers
 from . import models
 
@@ -18,7 +19,7 @@ class ItemDetailView(generics.RetrieveAPIView):
     serializer_class = _serializers.ItemSerializer
 
 
-class BasketAddView(generics.ListCreateAPIView):
+class BasketAddListView(generics.ListCreateAPIView):
 
     serializer_class = _serializers.BasketSerializer
 
@@ -32,9 +33,27 @@ class BasketAddView(generics.ListCreateAPIView):
         serializer.validated_data['user'] = user
         serializer.save(user=user)
 
-        return super(BasketAddView, self).create(serializer)
+        return super(BasketAddListView, self).create(serializer)
 
 
 class BasketChangeView(generics.RetrieveUpdateAPIView):
     serializer_class = _serializers.BasketSerializer
     queryset = models.Basket.objects.all()
+
+
+class BasketAddItemToTrolleyView(generics.RetrieveUpdateAPIView):
+    serializer_class = _serializers.BasketSerializer
+    queryset = models.Basket.objects.all()
+
+    def perform_update(self, serializer):
+        user = self.request.user
+        updated_item_ids = serializer.validated_data['items']
+        remove_item_from_basket_update_or_create_trolley(user, updated_item_ids)
+        serializer.save(user=user)
+
+        return super(BasketAddItemToTrolleyView, self).perform_update(serializer)
+
+
+class TrolleyAddListView(generics.ListCreateAPIView):
+    serializer_class = _serializers.TrolleySerializer
+    queryset = models.Trolley.objects.all()
