@@ -13,7 +13,7 @@ class Item(models.Model):
 
 class Voucher(models.Model):
     code = models.CharField(max_length=250)
-    discounted_rate = models.DecimalField(max_digits=5, decimal_places=2)
+    discounted_rate = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
 
 
 class Basket(models.Model):
@@ -27,19 +27,11 @@ class Trolley(models.Model):
     total_price = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('0'), null=True, blank=True)
 
 
-class OrderHistory(models.Model):
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
-    date = models.DateField()
-    items = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
-    total_paid = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0'))
-    payment_method = models.CharField(max_length=250, null=True, blank=True)
-
-
 class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
     items = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
     vouchers = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
-    total_paid = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0'))
+    total_paid = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0'), null=True, blank=True)
     payment_method = models.CharField(max_length=250, null=True, blank=True)
     status = models.CharField(max_length=250, null=True, blank=True)
 

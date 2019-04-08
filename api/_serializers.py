@@ -66,14 +66,22 @@ class TrolleySerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = '__all__'
-        read_only_fields = ('user', 'items', 'total_paid', 'status')
+        fields = (
+            'user_id',
+            'items',
+            'vouchers',
+            'total_paid',
+            'payment_method',
+            'status',
+        )
+        read_only_fields = ('user_id', 'items', 'total_paid', 'status')
 
         model = models.Order
 
-
-class OrderHistorySerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = '__all__'
-
-        model = models.OrderHistory
+    def validate(self, data):
+        request = self.context['request']
+        if request.method == 'POST':
+            if not models.Trolley.objects.filter(user=request.user).exclude(items=[]).exists():
+                error_message = 'You can place an order for empty trolley empty, add items first'
+                raise serializers.ValidationError(error_message)
+        return data
