@@ -53,8 +53,11 @@ make sure to add or remove accordingly as explained above
 
 11. Add order
 /api/v1/order/add
-user can only enter payment method and voucher code
+
+User can only enter payment method and voucher code
 The order total cost, status and list of items ordered will be populated automatically
+if order status is completed items will be removed from user trolley
+Order history will show as the orders with status completed. 
 
 ```
 
