@@ -7,17 +7,6 @@ from django.conf import settings
 
 def preload_data(apps, schema_editor):
     Item = apps.get_model('api', 'Item')
-    User = apps.get_model(*settings.AUTH_USER_MODEL.split('.'))
-
-    users = (
-        {'username': 'testuser', 'password': 'test123'},
-        {'username': 'devuser', 'password': 'dev123'},
-    )
-    for user in users:
-        User.objects.create(
-            username=user.get('username'),
-            password=user.get('password'),
-        )
 
     items = (
         {'id': 1, 'price': Decimal('28.57'), 'discounted': False},
