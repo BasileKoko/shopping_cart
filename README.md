@@ -62,7 +62,7 @@ Order history will show as the orders with status completed.
 ```
 
 - **Notes**
-- The folder 'file' shows the initial database schema and workflow
+- The folder 'file' shows the initial database schema and workflow, I modify it a bit during the development process
 - At the moment this functionality does not work as expected.
 It can fixed with a bit more debugging time.
 But the logic is implemented
