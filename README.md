@@ -1,6 +1,6 @@
-##Shopping Cart
+## Shopping Cart
 
-- **Setup**
+### Setup
 
 - In terminal, git clone https://github.com/BasileKoko/shopping_cart
 - cd shopping/

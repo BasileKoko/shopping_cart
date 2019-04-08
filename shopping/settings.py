@@ -108,6 +108,9 @@ DATABASES = {
         'HOST': os.environ.get('DB_LOCAL_HOST', 'localhost'),
         'PORT': os.environ.get('DB_PORT', '5432'),
     },
+    'TEST': {
+            'NAME': os.environ.get('TEST_DB_NAME'),
+        },
 }
 
 # Password validation

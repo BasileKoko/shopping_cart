@@ -2,3 +2,4 @@ env/
 .idea
 *.pyc
 api/__pycache__/*.pyc
+.cache/
