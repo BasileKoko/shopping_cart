@@ -109,7 +109,8 @@ DATABASES = {
         'PORT': os.environ.get('DB_PORT', '5432'),
     },
     'TEST': {
-            'NAME': os.environ.get('TEST_DB_NAME'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('TEST_DB_NAME'),
         },
 }
 

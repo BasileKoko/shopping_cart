@@ -9,16 +9,15 @@ def preload_data(apps, schema_editor):
     Item = apps.get_model('api', 'Item')
 
     items = (
-        {'id': 1, 'price': Decimal('28.57'), 'discounted': False},
-        {'id': 2, 'price': Decimal('15.36'), 'discounted': False},
-        {'id': 3, 'price': Decimal('118.53'), 'discounted': True},
-        {'id': 4, 'price': Decimal('58.75'), 'discounted': False},
-        {'id': 5, 'price': Decimal('8.20'), 'discounted': False},
-        {'id': 6, 'price': Decimal('725.00'), 'discounted': True},
+        {'price': Decimal('28.57'), 'discounted': False},
+        {'price': Decimal('15.36'), 'discounted': False},
+        {'price': Decimal('118.53'), 'discounted': True},
+        {'price': Decimal('58.75'), 'discounted': False},
+        {'price': Decimal('8.20'), 'discounted': False},
+        {'price': Decimal('725.00'), 'discounted': True},
     )
     for item in items:
         Item.objects.create(
-            id=item.get('id'),
             price=item.get('price'),
             discounted=item.get('discounted'),
         )

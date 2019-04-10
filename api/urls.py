@@ -2,7 +2,7 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('items/', views.ItemView.as_view()),
+    path('items/', views.ItemView.as_view(), name='get_items'),
     path('items/<int:pk>/', views.ItemDetailView.as_view()),
     path('basket/add', views.BasketAddListView.as_view()),
     path('basket/change/<int:pk>/', views.BasketChangeView.as_view()),
