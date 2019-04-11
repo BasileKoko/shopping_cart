@@ -1,10 +1,9 @@
 from decimal import Decimal
-from api import models
 import pytest
 from django.contrib.auth.models import User
 from django.test import Client, TestCase
 from model_mommy import mommy
-from rest_framework.test import APIClient, force_authenticate
+from rest_framework.test import APIClient
 
 from api.models import (
     Item,
@@ -125,63 +124,62 @@ class TestView(TestCase):
 
 
 @pytest.mark.django_db
-class UtilsFunctionTest(TestCase):
+class TestUtilsFunction(TestCase):
     def setUp(self):
-        user = User(username='test', email='test@example.com')
-        user.set_password('test123')
-        user.save()
+        self.user = User(username='test', email='test@example.com')
+        self.user.set_password('test123')
+        self.user.save()
 
     def test_trolley_items_not_found(self):
         result = trolley_items(self.user)
 
-        self.assertEqual(len(result), 0)
+        assert len(result) == 0
 
     def test_trolley_items_found(self):
-        Trolley.objects.create(
-            id=1,
+        mommy.make(
+            'api.Trolley',
             user=self.user,
-            items=['item1', 'item2'],
+            items=[1, 2],
             total_price=Decimal('25.00'),
         )
         result = trolley_items(self.user)
 
-        self.assertEqual(len(result), 1)
+        assert len(result) == 1
 
-    def test_delete_trolley_items_case_1(self):
-        Trolley.objects.create(
-            id=1,
+    def test_delete_trolley_items_case_trolley_not_deleted(self):
+        mommy.make(
+            'api.Trolley',
             user=self.user,
-            items=['item1', 'item2'],
+            items=[1, 2],
             total_price=Decimal('25.00'),
         )
         delete_trolley_items(self.user, 'incomplete', Decimal('0'))
-        result = Trolley.objects.get(user=self.user)
+        result = Trolley.objects.filter(user=self.user)
 
-        self.assertEqual(len(result), 1)
+        assert len(result) == 1
 
-    def test_delete_trolley_items_case_2(self):
-        Trolley.objects.create(
-            id=1,
+    def test_delete_trolley_items_case_trolley_deleted(self):
+        mommy.make(
+            'api.Trolley',
             user=self.user,
-            items=['item1', 'item2'],
+            items=[1, 2],
             total_price=Decimal('25.00'),
         )
-        delete_trolley_items(self.user, 'complete', Decimal('10'))
-        result = Trolley.objects.get(user=self.user)
+        delete_trolley_items(self.user, 'complete', Decimal('25.00'))
+        result = Trolley.objects.filter(user=self.user).first().items
 
-        self.assertEqual(len(result), 0)
+        assert len(result) == 0
 
     def test_calculate_total_price_item_found(self):
-        Item.objects.create(
-            id=1,
+        mommy.make(
+            'api.Trolley',
             user=self.user,
-            price=Decimal('10.35'),
-            discounted=False,
+            items=[1, 2, 3],
         )
-        result = calculate_trolley_total_price([1])
-        self.assertEqual(result, Decimal('10.35'))
+        result = calculate_trolley_total_price([1, 2, 3])
+        assert result == Decimal('162.46')
 
     def test_calculate_total_price_item_not_found(self):
-        result = calculate_trolley_total_price([2])
+        result = calculate_trolley_total_price([15])
 
-        self.assertEqual(result, Decimal())
+        assert result == Decimal()

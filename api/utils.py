@@ -9,7 +9,7 @@ def trolley_items(user):
 def delete_trolley_items(user, order_status, order_amount):
     if order_status == 'complete' and order_amount > Decimal():
         if trolley_items(user).exists():
-            trolley_items().first().items.delete()
+            trolley_items(user).update(items=[])
 
 
 def remove_item_from_basket_update_or_create_trolley(user, updated_item_ids):
