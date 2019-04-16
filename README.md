@@ -1,5 +1,6 @@
 ## Shopping Cart
-
+- This is an exercise to design a shopping cart using Rest API.
+- I am using Django REST Framework
 ### Setup
 
 - In terminal, git clone https://github.com/BasileKoko/shopping_cart
